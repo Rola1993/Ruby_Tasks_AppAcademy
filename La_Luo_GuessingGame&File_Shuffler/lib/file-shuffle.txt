@@ -1,0 +1,5 @@
+The examples I've shown you have all automatically closed the file when done. It is important to close files when you are finished with them; this doesn't matter so much for reading (it is merely inefficient), but if you don't close a file you are writing to, then the whole output may not be written to disk, and you may lose data.
+Hint: You could create a random number using the Random class, or you could use the shuffle method in Array.
+
+
+Write file_shuffler program that: * prompts the user for a file name * reads that file * shuffles the lines * saves it to the file "{input_name}-shuffled.txt".
