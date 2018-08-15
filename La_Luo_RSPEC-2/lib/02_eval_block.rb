@@ -26,7 +26,15 @@
 # were **ever** in `my_arg_array`. The splat operator passed in the
 # individual arguments as separate, distinct, discrete, un-array-ified
 # arguments.
-#
+
+def eval_block(*args, &blk)
+  if blk.nil?
+    raise 'NO BLOCK GIVEN!'
+  else
+    blk.call(*args)
+  end
+end
+
 # Examples of calling `eval_block`:
 #
 # ```ruby

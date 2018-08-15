@@ -4,6 +4,7 @@
 # factors of a given number.
 
 def factors(num)
+  return (1..num).to_a.select {|div| num % div == 0}
 end
 
 # ### Bubble Sort
@@ -47,9 +48,39 @@ end
 
 class Array
   def bubble_sort!
+
+    return self if self.length < 2
+    (self.length-2).downto(0).each do |i|
+      (0..i).each do |idx|
+        if self[idx] > self[idx+1]
+          self[idx],self[idx+1] = self[idx+1],self[idx]
+        end
+      end
+    end
+    return self
+  end
+
+  def bubble_sort(array)
+    arr = array.dup
+    return arr.bubble_sort!
+  end
+
+  def bubble_sort!(&prc)
+    prc ||= Proc.new { |x, y| x <=> y }
+
+    return self if self.length < 2
+    (self.length-2).downto(0).each do |i|
+      (0..i).each do |idx|
+        if prc.call(self[idx], self[idx+1]) == 1
+          self[idx],self[idx+1] = self[idx+1],self[idx]
+        end
+      end
+    end
+    return self
   end
 
   def bubble_sort(&prc)
+    self.dup.bubble_sort!(&prc)
   end
 end
 
@@ -67,9 +98,20 @@ end
 # words).
 
 def substrings(string)
+  res = []
+  (0...string.length).each do |start|
+      (start...string.length).each do |last|
+        res << string[start..last]
+      end
+  end
+  return res.uniq!
 end
 
 def subwords(word, dictionary)
+  res = substrings(word)
+  res.select! {|e| dictionary.include?(e)}
+
+  return res
 end
 
 # ### Doubler
@@ -77,6 +119,7 @@ end
 # array with the original elements multiplied by two.
 
 def doubler(array)
+  array.map {|e| e * 2}
 end
 
 # ### My Each
@@ -104,6 +147,14 @@ end
 
 class Array
   def my_each(&prc)
+    i = 0
+
+    while i < self.length
+      prc.call(self[i])
+      i += 1
+    end
+
+    return self
   end
 end
 
@@ -122,12 +173,21 @@ end
 
 class Array
   def my_map(&prc)
+    res = []
+    my_each {|e| res << prc.call(e)}
+    return res
   end
 
   def my_select(&prc)
+    res = []
+    my_each {|e| res << e if prc.call(e)}
+    return res
   end
 
   def my_inject(&blk)
+    res = self[0]
+    self.drop(1).my_each {|e| res = blk.call(res, e)}
+    return res
   end
 end
 
@@ -141,4 +201,5 @@ end
 # ```
 
 def concatenate(strings)
+  strings.inject("") { |res, str| res += str }
 end
